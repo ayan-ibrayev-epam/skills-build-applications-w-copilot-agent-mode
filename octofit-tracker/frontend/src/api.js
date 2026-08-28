@@ -4,9 +4,9 @@ export const API_BASE = codespaceName
   ? `https://${codespaceName}-8000.app.github.dev`
   : 'http://localhost:8000';
 
-// Normalise paginated {results:[]} and plain array responses.
-export async function fetchCollection(path) {
-  const res = await fetch(`${API_BASE}${path}`);
+// Normalise paginated {results:[]} and plain array responses. Accepts a full URL.
+export async function fetchCollection(url) {
+  const res = await fetch(url);
   if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
   const data = await res.json();
   return Array.isArray(data) ? data : (data.results ?? []);
