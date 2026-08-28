@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import './config/database.js';
 import usersRouter from './routes/users.js';
 import teamsRouter from './routes/teams.js';
@@ -14,10 +15,16 @@ const baseUrl = codespaceName
   ? `https://${codespaceName}-8000.app.github.dev`
   : `http://localhost:${port}`;
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/api/health', (_request, response) => {
   response.json({ status: 'ok', service: 'octofit-tracker-backend', baseUrl });
+});
+
+// Expose resolved base URL for client consumption
+app.get('/api/config', (_request, response) => {
+  response.json({ baseUrl });
 });
 
 app.use('/api/users', usersRouter);
